@@ -37,4 +37,28 @@
     <changefreq>monthly</changefreq>
   </url>
 
+  <url>
+    <loc>https://decidealways.com/online-timer.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://decidealways.com/dice-roller.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://decidealways.com/tip-calculator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://decidealways.com/password-generator.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
 </urlset>
