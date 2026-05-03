@@ -470,39 +470,48 @@
 
 <!-- SEO Content -->
 <div class="content">
-  <h2>About this coin flip tool</h2>
-  <p>This free online coin flip uses <code>crypto.getRandomValues()</code> — the same cryptographically secure randomness your browser uses for security — to ensure every flip is genuinely 50/50. No patterns, no bias, no tricks.</p>
-  <p>Perfect for settling disputes, making quick decisions, classroom activities, game night, sports team selection, and anywhere you need a fair random result.</p>
+  <h2>About this free coin flip tool</h2>
+  <p>This free online coin flip tool gives you an instant, unbiased heads or tails result every time you click. Whether you need to settle a friendly argument, make a quick decision, or run a fair game, flipping a digital coin is faster and more reliable than fishing around for a physical coin.</p>
+  <p>Unlike a physical coin toss — which can be influenced by starting position, flip force, and even how you catch it — this digital version uses <code>crypto.getRandomValues()</code>, a cryptographically secure random number generator built into your browser. This is the same technology used in SSL certificates and online banking security. Every flip is a genuine 50/50 outcome, completely independent of every previous result.</p>
+
+  <h2>How to use the coin flip tool</h2>
+  <p>Using this tool is straightforward. Simply click the coin or press the "Flip Coin" button to get an instant result. The tool tracks your running totals — heads count, tails count, and total flips — so you can see the distribution over many flips. The last 20 results are shown as coloured dots below the stats so you can spot streaks at a glance. Click "Reset stats" to start a fresh session.</p>
+
+  <h2>When to use a coin flip</h2>
+  <p>Coin flips are one of the oldest and fairest random decision tools in existence. Here are some common situations where flipping a coin is the perfect solution:</p>
+  <p><strong>Making decisions:</strong> When you're genuinely torn between two options and neither logic nor preference gives you a clear winner, a coin flip cuts through indecision instantly. Many people find that their emotional reaction to the result tells them what they actually wanted — if you feel relieved, that was the right choice.</p>
+  <p><strong>Settling disputes fairly:</strong> Coin flips are universally accepted as fair. From deciding who goes first in a game to who picks the restaurant tonight, a coin toss removes any accusation of bias.</p>
+  <p><strong>Sports and games:</strong> Coin flips are used professionally — from NFL kickoffs to cricket innings decisions — because they're provably fair. Use this tool the same way for your own games.</p>
+  <p><strong>Classroom activities:</strong> Teachers use coin flips to assign groups, pick volunteers, or demonstrate probability concepts. Flip the coin 100 times and watch how the results approach 50/50 over many trials — a perfect hands-on statistics lesson.</p>
+  <p><strong>Probability experiments:</strong> Students and curious minds can use the flip counter to run experiments. How many flips until you get 10 heads in a row? How close to 50/50 are you after 50 flips? 100? 500?</p>
+
+  <h2>The science of coin flipping</h2>
+  <p>Interestingly, a real physical coin flip is not perfectly 50/50. Research from Stanford University found that coins tend to land on the same side they started on about 51% of the time, due to the physics of how humans flip coins. A digital coin flip eliminates this bias entirely — every result is genuinely random with no physical variables involved.</p>
 
   <div class="faq">
     <div class="faq-item">
       <h3>Is this coin flip truly random?</h3>
-      <p>Yes. We use <code>crypto.getRandomValues()</code>, a cryptographically secure random number generator built into your browser. It's the same method used for SSL certificates and encryption. Every flip is independent — past results never influence future ones.</p>
+      <p>Yes. We use <code>crypto.getRandomValues()</code>, a cryptographically secure random number generator built into your browser. It's the same method used for SSL certificates and encryption. Every flip is independent — past results never influence future ones. This is significantly more random than JavaScript's built-in Math.random() which many other tools use.</p>
     </div>
     <div class="faq-item">
       <h3>Can I flip multiple times quickly?</h3>
-      <p>Yes — just click the button or tap the coin repeatedly. Each flip is instant and independent. Your full history and running totals are tracked on this page.</p>
+      <p>Yes — just click the button or tap the coin repeatedly. Each flip is instant and independent. Your full history and running totals are tracked on this page throughout your session.</p>
     </div>
-    
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="5555555555"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
     <div class="faq-item">
       <h3>Is this free to use?</h3>
-      <p>Completely free, no account needed, no limits on how many times you flip.</p>
+      <p>Completely free, with no account needed and no limits on how many times you flip. DecideAlways is a free tool suite — no premium tiers or paywalls.</p>
     </div>
     <div class="faq-item">
       <h3>Does it work on mobile?</h3>
-      <p>Yes — just tap the coin or the Flip Coin button. Works on all modern phones and tablets.</p>
+      <p>Yes — just tap the coin or the Flip Coin button. The tool is fully optimised for phones and tablets with tap-friendly targets and a responsive layout.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Why did I get heads 10 times in a row? Is something wrong?</h3>
+      <p>Nothing is wrong — this is completely normal and expected with truly random results. The probability of 10 heads in a row is 1 in 1,024, which sounds rare but happens regularly if you flip enough times. Each flip is always 50/50 regardless of what came before. This is called the gambler's fallacy — past results never affect future outcomes in a fair random system.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I use this for a giveaway or competition?</h3>
+      <p>Yes — a coin flip is a fair and transparent way to decide between two finalists. For more than two options, use our <a href="/picker-wheel.html">Spin Wheel</a> tool instead, which lets you add custom entries and spin for a random winner.</p>
     </div>
   </div>
 </div>
@@ -611,5 +620,7 @@
     coin.style.transform = '';
   }
 </script>
+
+<div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
 </body>
 </html>
