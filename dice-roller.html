@@ -193,148 +193,42 @@
 </div>
 
 <div class="content">
-  <h2>Free online dice roller</h2>
-  <p>Roll one or two standard six-sided dice using cryptographic randomness. Every roll is completely independent — no patterns, no bias. Perfect for board games, tabletop RPGs, classrooms, and any game that needs a fair roll.</p>
+  <h2>Free online dice roller — roll 1 or 2 dice</h2>
+  <p>This free online dice roller simulates a standard six-sided die with a satisfying rolling animation. Choose between rolling one die or two dice using the toggle at the top, then click Roll Dice or click the dice themselves to get a result. Every roll uses cryptographic randomness for a genuinely fair outcome every time.</p>
+  <p>The roller tracks your complete session history — the last 20 rolls shown as number badges, plus your lowest roll, highest roll, and total number of rolls. Click Reset stats to start a fresh session.</p>
+
+  <h2>How to roll the dice</h2>
+  <p>Select 1 Die or 2 Dice using the toggle at the top. Click the Roll Dice button, or click directly on the dice to roll them. The dice animate through a tumbling roll before landing on the result. If you are rolling two dice, both dice are shown and their total is displayed prominently along with the breakdown (e.g. "4 + 3 = 7") so you can see each individual die value.</p>
+
+  <h2>When to use an online dice roller</h2>
+  <p><strong>Board games:</strong> The most common use. When you do not have physical dice handy, or when you want to keep a game going digitally. Works for any game that uses standard six-sided dice including Monopoly, Yahtzee, Backgammon, and hundreds of others.</p>
+  <p><strong>Tabletop role-playing games:</strong> Many RPGs use standard six-sided dice. Roll two dice for games like Traveller or any system that uses 2d6 as its core mechanic. For other dice types (d4, d8, d10, d12, d20), use our <a href="/random-number.html">Random Number Generator</a> with the appropriate range.</p>
+  <p><strong>Teaching probability:</strong> Dice are one of the most intuitive tools for teaching probability concepts. Roll the dice many times and observe how the distribution forms a bell curve for 2 dice (results near 6 and 7 are most common) or a flat distribution for 1 die (all results equally likely).</p>
+  <p><strong>Decision making:</strong> Assign options to numbers and roll to decide. Roll one die to choose between up to six options, or use two dice for up to 11 options (2 through 12).</p>
+
+  <h2>Probability with two dice</h2>
+  <p>When rolling two dice, not all totals are equally likely. A total of 7 is the most probable result — 6 ways to make it out of 36 combinations, giving a 16.7% probability. Totals of 2 and 12 are the least likely with only one way each, giving a 2.8% probability. This is why 7 is so important in games like craps and why understanding two-dice probability is a core concept in statistics education.</p>
+
   <div class="faq">
-    <div class="faq-item"><h3>Is this truly random?</h3><p>Yes. We use <code>crypto.getRandomValues()</code> for every roll — the same cryptographic randomness used in browser security. Each roll is genuinely independent.</p></div>
-    <div class="faq-item"><h3>Can I roll more than 2 dice?</h3><p>The current tool supports 1 or 2 dice. For rolling multiple dice for D&D and other RPGs, each click gives you a fresh pair of results which you can use together.</p></div>
-
-    <div class="ad-unit" style="margin:20px 0">
-      <div class="ad-label">Advertisement</div>
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="6666666666" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <div class="faq-item"><h3>What's the probability of rolling a 12 with 2 dice?</h3><p>With two fair six-sided dice, rolling a 12 (double six) has a 1 in 36 chance — about 2.78%. Rolling a 7 is most likely at 6 in 36 (16.67%).</p></div>
+    <div class="faq-item"><h3>Is this truly random?</h3><p>Yes. We use <code>crypto.getRandomValues()</code> for every roll — the same cryptographic randomness used in browser security. Each roll is genuinely independent with equal probability for each face. This is more reliable than physical dice, which can be subtly biased by manufacturing imperfections.</p></div>
+    <div class="faq-item"><h3>Can I roll more than 2 dice?</h3><p>The current tool supports 1 or 2 standard six-sided dice. For rolling more dice or different types (d4, d8, d10, d12, d20), use our <a href="/random-number.html">Random Number Generator</a> with the appropriate range.</p></div>
+    <div class="faq-item"><h3>What is the probability of rolling a 12 with 2 dice?</h3><p>Rolling a 12 (double six) has exactly a 1 in 36 chance — approximately 2.78%. Rolling a 7 is the most likely outcome at 6 in 36 (16.67%).</p></div>
+    <div class="faq-item"><h3>Can I use this for D&amp;D and other RPGs?</h3><p>Yes for any mechanic that uses 2d6 or 1d6. For other RPG dice (d4, d8, d10, d12, d20, d100), use our Random Number Generator with the range set to 1-4, 1-8, 1-10, 1-12, 1-20, or 1-100 respectively.</p></div>
+    <div class="faq-item"><h3>Does it work on mobile?</h3><p>Yes — tap the dice or the Roll Dice button on any touch device. The animation and result display are fully optimised for mobile screens.</p></div>
   </div>
+
   <div style="margin-top:48px">
     <div class="section-label">More free tools</div>
     <div class="tools-grid">
       <a href="/coin-flip.html" class="tool-card"><span class="tool-icon">🪙</span><span class="tool-name">Coin Flip</span><span class="tool-desc">Heads or tails</span></a>
       <a href="/random-number.html" class="tool-card"><span class="tool-icon">🎯</span><span class="tool-name">Random Number</span><span class="tool-desc">Any range</span></a>
-      <a href="/online-timer.html" class="tool-card"><span class="tool-icon">⏱️</span><span class="tool-name">Online Timer</span><span class="tool-desc">Countdown & stopwatch</span></a>
+      <a href="/online-timer.html" class="tool-card"><span class="tool-icon">⏱️</span><span class="tool-name">Online Timer</span><span class="tool-desc">Countdown and stopwatch</span></a>
       <a href="/picker-wheel.html" class="tool-card"><span class="tool-icon">🎡</span><span class="tool-name">Spin Wheel</span><span class="tool-desc">Custom entries</span></a>
     </div>
   </div>
 </div>
 
-<script>
-  let diceCount = 1;
-  let rolling = false;
-  let rollHistory = [];
-  let allRolls = [];
 
-  const DOT_LAYOUTS = {
-    1: '<div class="dots dots-1"><div class="dot"></div></div>',
-    2: '<div class="dots dots-2"><div class="dot"></div><div class="dot"></div></div>',
-    3: '<div class="dots dots-3"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>',
-    4: '<div class="dots dots-4"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>',
-    5: '<div class="dots dots-5"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>',
-    6: '<div class="dots dots-6"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>',
-  };
-
-  function randDie() {
-    const arr = new Uint32Array(1);
-    crypto.getRandomValues(arr);
-    return (arr[0] % 6) + 1;
-  }
-
-  function setDiceCount(n, btn) {
-    diceCount = n;
-    document.querySelectorAll('.dice-opt').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    const stage = document.getElementById('diceStage');
-    if (n === 1) {
-      stage.innerHTML = `<div class="die-wrap"><div class="die" id="die1" onclick="roll()"><div class="die-face" id="face1">${DOT_LAYOUTS[1]}</div></div></div>`;
-    } else {
-      stage.innerHTML = `
-        <div class="die-wrap"><div class="die" id="die1" onclick="roll()"><div class="die-face" id="face1">${DOT_LAYOUTS[1]}</div></div></div>
-        <div class="die-wrap"><div class="die" id="die2" onclick="roll()"><div class="die-face" id="face2">${DOT_LAYOUTS[1]}</div></div></div>`;
-    }
-    document.getElementById('resultNum').className = 'result-num';
-    document.getElementById('resultSub').className = 'result-sub';
-  }
-
-  function roll() {
-    if (rolling) return;
-    rolling = true;
-    document.getElementById('rollBtn').disabled = true;
-    document.getElementById('resultNum').className = 'result-num';
-    document.getElementById('resultSub').className = 'result-sub';
-
-    const r1 = randDie();
-    const r2 = diceCount === 2 ? randDie() : null;
-    const dur = 0.6 + Math.random() * 0.3;
-
-    ['die1', 'die2'].forEach((id, i) => {
-      const die = document.getElementById(id);
-      if (!die) return;
-      die.style.setProperty('--dur', dur + 's');
-      die.classList.add('rolling');
-    });
-
-    // Shuffle faces during roll
-    const faceInterval = setInterval(() => {
-      const f1 = document.getElementById('face1');
-      if (f1) f1.innerHTML = DOT_LAYOUTS[randDie()];
-      const f2 = document.getElementById('face2');
-      if (f2) f2.innerHTML = DOT_LAYOUTS[randDie()];
-    }, 80);
-
-    setTimeout(() => {
-      clearInterval(faceInterval);
-      ['die1', 'die2'].forEach(id => {
-        const die = document.getElementById(id);
-        if (die) die.classList.remove('rolling');
-      });
-
-      const f1 = document.getElementById('face1');
-      if (f1) f1.innerHTML = DOT_LAYOUTS[r1];
-      const f2 = document.getElementById('face2');
-      if (f2) f2.innerHTML = DOT_LAYOUTS[r2];
-
-      const total = r2 !== null ? r1 + r2 : r1;
-      const resultEl = document.getElementById('resultNum');
-      resultEl.textContent = total;
-      resultEl.classList.add('show');
-
-      const sub = document.getElementById('resultSub');
-      sub.textContent = r2 !== null ? `${r1} + ${r2} = ${total}` : `You rolled a ${r1}`;
-      sub.classList.add('show');
-
-      allRolls.push(total);
-      rollHistory.unshift(total);
-      if (rollHistory.length > 20) rollHistory.pop();
-      updateStats();
-      updateHistory();
-
-      rolling = false;
-      document.getElementById('rollBtn').disabled = false;
-    }, dur * 1000);
-  }
-
-  function updateStats() {
-    document.getElementById('statsRow').style.display = 'grid';
-    document.getElementById('statLow').textContent = Math.min(...allRolls);
-    document.getElementById('statHigh').textContent = Math.max(...allRolls);
-    document.getElementById('statCount').textContent = allRolls.length;
-  }
-
-  function updateHistory() {
-    document.getElementById('histSection').style.display = 'block';
-    document.getElementById('histDots').innerHTML = rollHistory.map((n, i) =>
-      `<div class="hist-dot" style="${i===0?'color:var(--accent);border-color:rgba(245,200,66,0.3)':''}">${n}</div>`
-    ).join('');
-  }
-
-  function resetStats() {
-    allRolls = []; rollHistory = [];
-    document.getElementById('statsRow').style.display = 'none';
-    document.getElementById('histSection').style.display = 'none';
-    document.getElementById('resultNum').className = 'result-num';
-    document.getElementById('resultSub').className = 'result-sub';
-  }
-</script>
+<div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
 </body>
 </html>
