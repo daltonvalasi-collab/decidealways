@@ -200,76 +200,39 @@
 </div>
 
 <div class="content">
-  <h2>Free tip calculator</h2>
-  <p>Enter your bill total, select a tip percentage, and choose how many people are splitting the bill. The calculator instantly shows the tip amount and the total per person.</p>
+  <h2>Free tip calculator — split any bill instantly</h2>
+  <p>This free tip calculator works out your tip amount and the total per person in seconds. Enter the bill amount, select or type a tip percentage, and choose how many people are splitting the bill. All calculations update instantly as you type. Supports multiple currencies including USD, GBP, EUR, AUD, NZD, and CAD.</p>
+
+  <h2>How to calculate a tip</h2>
+  <p>Enter your total bill amount in the large input field at the top. Select your currency from the dropdown. Then choose a tip percentage from the preset buttons or type a custom amount. Use the plus and minus buttons to set how many people are splitting the bill. The calculator instantly shows your tip amount, tip per person, and the total per person including food and tip.</p>
+  <p>The calculation is: tip amount = bill amount multiplied by tip percentage divided by 100. Total per person = (bill plus tip) divided by number of people.</p>
+
+  <h2>How much should you tip?</h2>
+  <p><strong>United States:</strong> Tipping is deeply embedded in US service culture. 15% is considered the minimum for acceptable service, 18 to 20% is standard for good service, and 25% or more is for exceptional service.</p>
+  <p><strong>United Kingdom:</strong> 10 to 12.5% is standard at sit-down restaurants. Many UK restaurants add a discretionary service charge — check your bill before tipping additionally.</p>
+  <p><strong>Australia and New Zealand:</strong> Tipping is not culturally expected, where minimum wage laws mean hospitality workers earn a liveable wage without tips. However, 10% is appreciated for excellent service in city restaurants.</p>
+  <p><strong>Europe:</strong> Tipping practices vary by country. In Germany, rounding up the bill is common. France includes a service charge by law. Scandinavia rarely expects tips.</p>
+
   <div class="faq">
-    <div class="faq-item"><h3>What tip percentage should I leave?</h3><p>In the US, 15–20% is standard for sit-down restaurants. 10% is acceptable for counter service. In the UK, 10–12.5% is typical. In Australia and New Zealand, tipping is not expected but 10% is appreciated for excellent service.</p></div>
-    <div class="faq-item"><h3>How is the tip calculated?</h3><p>Tip amount = Bill × (Tip% ÷ 100). Total per person = (Bill + Tip) ÷ Number of people. The calculator rounds to 2 decimal places.</p></div>
-
-    <div class="ad-unit" style="margin:20px 0">
-      <div class="ad-label">Advertisement</div>
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="9999999999" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <div class="faq-item"><h3>Can I split unevenly?</h3><p>This calculator assumes an even split. For uneven splits, calculate the total per person first, then adjust individual amounts manually.</p></div>
+    <div class="faq-item"><h3>What tip percentage should I leave?</h3><p>In the US, 15 to 20% is standard for sit-down restaurants. In the UK, 10 to 12.5% is typical. In Australia and New Zealand, tipping is not expected but 10% is appreciated for excellent service.</p></div>
+    <div class="faq-item"><h3>How is the tip calculated?</h3><p>Tip amount = Bill multiplied by (Tip% divided by 100). Total per person = (Bill plus Tip) divided by number of people. All values are rounded to 2 decimal places.</p></div>
+    <div class="faq-item"><h3>Should I tip on the pre-tax or post-tax amount?</h3><p>In the US, both approaches are acceptable. Tipping on the pre-tax amount is technically correct as the tip is for service. In practice the difference is small and tipping on the total is more common.</p></div>
+    <div class="faq-item"><h3>Can I split unevenly?</h3><p>This calculator assumes an even split. For uneven splits, calculate the total per person and adjust individual contributions manually based on what each person ordered.</p></div>
+    <div class="faq-item"><h3>Which currencies are supported?</h3><p>USD, GBP, EUR, AUD, NZD, and CAD. Select your currency from the dropdown next to the bill amount field.</p></div>
   </div>
+
   <div style="margin-top:48px">
     <div class="section-label">More free tools</div>
     <div class="tools-grid">
       <a href="/random-number.html" class="tool-card"><span class="tool-icon">🎯</span><span class="tool-name">Random Number</span><span class="tool-desc">Any range</span></a>
       <a href="/coin-flip.html" class="tool-card"><span class="tool-icon">🪙</span><span class="tool-name">Coin Flip</span><span class="tool-desc">Heads or tails</span></a>
-      <a href="/online-timer.html" class="tool-card"><span class="tool-icon">⏱️</span><span class="tool-name">Timer</span><span class="tool-desc">Countdown & stopwatch</span></a>
+      <a href="/online-timer.html" class="tool-card"><span class="tool-icon">⏱️</span><span class="tool-name">Timer</span><span class="tool-desc">Countdown and stopwatch</span></a>
       <a href="/password-generator.html" class="tool-card"><span class="tool-icon">🔐</span><span class="tool-name">Password</span><span class="tool-desc">Secure generator</span></a>
     </div>
   </div>
 </div>
 
-<script>
-  let tipPct = 15;
-  let people = 1;
 
-  function setTip(pct, btn) {
-    tipPct = pct;
-    document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('customTip').value = pct;
-    calculate();
-  }
-
-  function onCustomTip() {
-    const val = parseFloat(document.getElementById('customTip').value);
-    if (!isNaN(val) && val >= 0) {
-      tipPct = val;
-      document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
-    }
-    calculate();
-  }
-
-  function changePeople(delta) {
-    people = Math.max(1, Math.min(99, people + delta));
-    document.getElementById('peopleNum').textContent = people;
-    document.getElementById('peopleLabel').textContent = people === 1 ? 'person' : 'people';
-    calculate();
-  }
-
-  function calculate() {
-    const bill = parseFloat(document.getElementById('billInput').value) || 0;
-    const sym = document.getElementById('currencySelect').value;
-    document.getElementById('currSymbol').textContent = sym;
-
-    const tip = bill * (tipPct / 100);
-    const total = bill + tip;
-    const tipPer = tip / people;
-    const totalPer = total / people;
-
-    document.getElementById('tipAmount').textContent = sym + tip.toFixed(2);
-    document.getElementById('tipPer').textContent = sym + tipPer.toFixed(2);
-    document.getElementById('totalPer').textContent = sym + totalPer.toFixed(2);
-  }
-
-  // Init
-  calculate();
-</script>
+<div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
 </body>
 </html>
