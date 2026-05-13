@@ -382,11 +382,6 @@
     .stats-row { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
-
-  <!-- ============================================================
-       GOOGLE ADSENSE — replace ca-pub-XXXXXXXXXXXXXXXX with your
-       actual Publisher ID from adsense.google.com
-  ============================================================ -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3748246393578670"
      crossorigin="anonymous"></script>
   <!-- AdSense ad-unit styles -->
@@ -431,98 +426,6 @@
   <span class="big-number" id="bigNum">?</span>
   <div class="range-hint" id="rangeHint">Set your range below</div>
 </div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="9999999999"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-<!-- Controls -->
-<div class="controls">
-  <div class="range-row">
-    <div class="range-group">
-      <div class="range-label">Min</div>
-      <input class="range-input" type="number" id="minInput" value="1">
-    </div>
-    <div class="range-sep">—</div>
-    <div class="range-group">
-      <div class="range-label">Max</div>
-      <input class="range-input" type="number" id="maxInput" value="100">
-    </div>
-  </div>
-
-  <!-- Presets -->
-  <div class="presets">
-    <button class="preset-btn" onclick="setPreset(1,6,'dice')">🎲 Dice (1–6)</button>
-    <button class="preset-btn" onclick="setPreset(1,10,'10')">1–10</button>
-    <button class="preset-btn active" onclick="setPreset(1,100,'100')">1–100</button>
-    <button class="preset-btn" onclick="setPreset(1,1000,'1000')">1–1000</button>
-    <button class="preset-btn" onclick="setPreset(0,9,'digit')">0–9</button>
-  </div>
-
-  <button class="btn-generate" id="genBtn" onclick="generate()">Generate</button>
-  <button class="btn-multi" onclick="toggleMulti()">Generate multiple numbers</button>
-</div>
-
-<!-- Multi output -->
-<div class="multi-output" id="multiOutput">
-  <div class="multi-controls">
-    <span class="multi-label">How many?</span>
-    <input class="multi-count" type="number" id="multiCount" value="5" min="2" max="50">
-    <button class="btn-generate" style="width:auto;padding:10px 24px;font-size:15px;margin:0" onclick="generateMulti()">Go</button>
-  </div>
-  <div class="multi-title" id="multiTitle"></div>
-  <div class="multi-grid" id="multiGrid"></div>
-</div>
-
-<!-- Stats -->
-<div class="stats-row" id="statsRow" style="display:none">
-  <div class="stat-card">
-    <span class="stat-n" id="statMin">—</span>
-    <span class="stat-l">Lowest</span>
-  </div>
-  <div class="stat-card">
-    <span class="stat-n" id="statCount">0</span>
-    <span class="stat-l">Generated</span>
-  </div>
-  <div class="stat-card">
-    <span class="stat-n" id="statMax">—</span>
-    <span class="stat-l">Highest</span>
-  </div>
-</div>
-
-<!-- History -->
-<div class="history-section" id="histSection" style="display:none">
-  <div class="history-title">
-    Recent numbers
-    <button class="clear-hist" onclick="clearHistory()">Clear</button>
-  </div>
-  <div class="history-list" id="histList"></div>
-</div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="1010101010"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
 <!-- SEO -->
 <div class="content">
   <h2>Free random number generator</h2>
@@ -538,20 +441,7 @@
       <h3>What's the largest range I can use?</h3>
       <p>You can use any integers as min and max, including negative numbers. The generator handles very large ranges accurately.</p>
     </div>
-    
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="1111111112"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-    <div class="faq-item">
+<div class="faq-item">
       <h3>Can I generate lottery numbers?</h3>
       <p>Yes — use the "Generate multiple" option and set the range to match your lottery (e.g. 1–49 for UK Lotto, 1–69 for Powerball). Note that this is for entertainment — genuine lotteries use certified hardware randomness.</p>
     </div>
@@ -632,7 +522,8 @@
           `Between <span>${min}</span> and <span>${max}</span>`;
 
         // Stats
-        allNums.push(num);
+        trackDecision();
+      allNums.push(num);
         history.unshift(num);
         if (history.length > 20) history.pop();
         updateStats();
@@ -700,5 +591,24 @@
 </script>
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
