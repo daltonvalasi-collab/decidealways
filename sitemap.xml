@@ -67,4 +67,28 @@
     <changefreq>yearly</changefreq>
   </url>
 
+  <url>
+    <loc>https://decidealways.com/about.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://decidealways.com/blog/how-teachers-use-spin-wheels.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://decidealways.com/blog/psychology-of-coin-flips.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://decidealways.com/blog/what-is-password-entropy.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
 </urlset>
