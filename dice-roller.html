@@ -152,45 +152,6 @@
   <p>Roll one or two dice instantly. Truly random, every time.</p>
 </div>
 
-<div class="ad-unit">
-  <div class="ad-label">Advertisement</div>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="4444444444" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
-
-<div class="dice-selector">
-  <button class="dice-opt active" onclick="setDiceCount(1, this)">1 Die</button>
-  <button class="dice-opt" onclick="setDiceCount(2, this)">2 Dice</button>
-</div>
-
-<div class="dice-stage" id="diceStage">
-  <div class="die-wrap"><div class="die" id="die1" onclick="roll()"><div class="die-face" id="face1"><div class="dots dots-1"><div class="dot"></div></div></div></div></div>
-</div>
-
-<div class="result-area">
-  <span class="result-num" id="resultNum">—</span>
-  <div class="result-sub" id="resultSub">Click the dice or button to roll</div>
-</div>
-
-<button class="btn-roll" id="rollBtn" onclick="roll()">Roll Dice</button>
-<button class="btn-reset" onclick="resetStats()">Reset stats</button>
-
-<div class="stats" id="statsRow" style="display:none">
-  <div class="stat-card"><span class="stat-n" id="statLow">—</span><span class="stat-l">Lowest</span></div>
-  <div class="stat-card"><span class="stat-n" id="statCount">0</span><span class="stat-l">Rolls</span></div>
-  <div class="stat-card"><span class="stat-n" id="statHigh">—</span><span class="stat-l">Highest</span></div>
-</div>
-
-<div class="history" id="histSection" style="display:none">
-  <div class="hist-label">Last 20 rolls</div>
-  <div class="hist-dots" id="histDots"></div>
-</div>
-
-<div class="ad-unit" style="margin-top:40px">
-  <div class="ad-label">Advertisement</div>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="5555555555" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
 
 <div class="content">
   <h2>Free online dice roller — roll 1 or 2 dice</h2>
@@ -230,5 +191,58 @@
 
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+<script>
+  let diceCount=1,rolling=false,rollHistory=[],allRolls=[];
+  const DOT_LAYOUTS={1:'<div class="dots dots-1"><div class="dot"></div></div>',2:'<div class="dots dots-2"><div class="dot"></div><div class="dot"></div></div>',3:'<div class="dots dots-3"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>',4:'<div class="dots dots-4"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>',5:'<div class="dots dots-5"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>',6:'<div class="dots dots-6"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>'};
+  function randDie(){const a=new Uint32Array(1);crypto.getRandomValues(a);return(a[0]%6)+1;}
+  function setDiceCount(n,btn){
+    diceCount=n;document.querySelectorAll('.dice-opt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+    const stage=document.getElementById('diceStage');
+    if(n===1){stage.innerHTML=`<div class="die-wrap"><div class="die" id="die1" onclick="roll()"><div class="die-face" id="face1">${DOT_LAYOUTS[1]}</div></div></div>`;}
+    else{stage.innerHTML=`<div class="die-wrap"><div class="die" id="die1" onclick="roll()"><div class="die-face" id="face1">${DOT_LAYOUTS[1]}</div></div></div><div class="die-wrap"><div class="die" id="die2" onclick="roll()"><div class="die-face" id="face2">${DOT_LAYOUTS[1]}</div></div></div>`;}
+    document.getElementById('resultNum').className='result-num';document.getElementById('resultSub').className='result-sub';
+  }
+  function roll(){
+    if(rolling)return; rolling=true; document.getElementById('rollBtn').disabled=true;
+    document.getElementById('resultNum').className='result-num';document.getElementById('resultSub').className='result-sub';
+    const r1=randDie(),r2=diceCount===2?randDie():null,dur=0.6+Math.random()*0.3;
+    ['die1','die2'].forEach(id=>{const die=document.getElementById(id);if(!die)return;die.style.setProperty('--dur',dur+'s');die.classList.add('rolling');});
+    const faceInterval=setInterval(()=>{const f1=document.getElementById('face1');if(f1)f1.innerHTML=DOT_LAYOUTS[randDie()];const f2=document.getElementById('face2');if(f2)f2.innerHTML=DOT_LAYOUTS[randDie()];},80);
+    setTimeout(()=>{
+      clearInterval(faceInterval);
+      ['die1','die2'].forEach(id=>{const die=document.getElementById(id);if(die)die.classList.remove('rolling');});
+      const f1=document.getElementById('face1');if(f1)f1.innerHTML=DOT_LAYOUTS[r1];
+      const f2=document.getElementById('face2');if(f2)f2.innerHTML=DOT_LAYOUTS[r2];
+      const total=r2!==null?r1+r2:r1;
+      trackDecision();
+      const resultEl=document.getElementById('resultNum');resultEl.textContent=total;resultEl.classList.add('show');
+      const sub=document.getElementById('resultSub');sub.textContent=r2!==null?`${r1} + ${r2} = ${total}`:`You rolled a ${r1}`;sub.classList.add('show');
+      allRolls.push(total);rollHistory.unshift(total);if(rollHistory.length>20)rollHistory.pop();
+      updateStats();updateHistory();rolling=false;document.getElementById('rollBtn').disabled=false;
+    },dur*1000);
+  }
+  function updateStats(){document.getElementById('statsRow').style.display='grid';document.getElementById('statLow').textContent=Math.min(...allRolls);document.getElementById('statHigh').textContent=Math.max(...allRolls);document.getElementById('statCount').textContent=allRolls.length;}
+  function updateHistory(){document.getElementById('histSection').style.display='block';document.getElementById('histDots').innerHTML=rollHistory.map((n,i)=>`<div class="hist-dot" style="${i===0?'color:var(--accent);border-color:rgba(245,200,66,0.3)':''}">${n}</div>`).join('');}
+  function resetStats(){allRolls=[];rollHistory=[];document.getElementById('statsRow').style.display='none';document.getElementById('histSection').style.display='none';document.getElementById('resultNum').className='result-num';document.getElementById('resultSub').className='result-sub';}
+</script>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
