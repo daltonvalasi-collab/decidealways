@@ -400,11 +400,6 @@
     .hero h1 { font-size: 32px; letter-spacing: -1px; }
   }
 </style>
-
-  <!-- ============================================================
-       GOOGLE ADSENSE — replace ca-pub-XXXXXXXXXXXXXXXX with your
-       actual Publisher ID from adsense.google.com
-  ============================================================ -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3748246393578670"
      crossorigin="anonymous"></script>
   <!-- AdSense ad-unit styles -->
@@ -442,79 +437,6 @@
   <h1>Spin the <span>Wheel</span></h1>
   <p>Add your choices, spin, and let fate decide. Free forever.</p>
 </div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="6666666666"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-<div class="main">
-  <!-- Wheel -->
-  <div class="wheel-section">
-    <div class="wheel-outer">
-      <canvas class="wheel-canvas" id="wheelCanvas"></canvas>
-      <div class="pointer"></div>
-      <div class="spin-center" onclick="spin()">
-        <span>SPIN</span>
-      </div>
-    </div>
-
-    <div class="result-banner" id="resultBanner">
-      <span class="result-text" id="resultText">Spin the wheel!</span>
-    </div>
-
-    <button class="btn-spin" id="spinBtn" onclick="spin()">Spin Now</button>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sidebar-title">
-      Entries
-      <span class="entry-count" id="entryCount">6</span>
-    </div>
-
-    <div class="entries-list" id="entriesList"></div>
-
-    <div class="add-row">
-      <input class="add-input" id="addInput" type="text" placeholder="Add an entry..." maxlength="40">
-      <button class="btn-add" onclick="addEntry()">+</button>
-    </div>
-
-    <div class="sidebar-actions">
-      <button class="btn-clear" onclick="clearAll()">Clear all</button>
-      <button class="btn-clear" onclick="loadDefaults()">Reset defaults</button>
-    </div>
-
-    <div class="history-panel" id="historyPanel" style="display:none">
-      <div class="history-title">Spin history</div>
-      <div class="history-items" id="historyItems"></div>
-    </div>
-  </div>
-</div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="7777777777"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
 <!-- SEO Content -->
 <div class="content">
   <h2>Free online spin wheel</h2>
@@ -534,20 +456,7 @@
       <h3>Can I use this for classroom name picking?</h3>
       <p>Absolutely. Add all your students' names and spin. You can remove a name after it's been picked to ensure everyone gets a turn.</p>
     </div>
-    
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="8888888888"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-    <div class="faq-item">
+<div class="faq-item">
       <h3>Can I use this for a giveaway?</h3>
       <p>Yes — add all participant names and spin. The result is random and fair, making it perfect for prize draws and competitions.</p>
     </div>
@@ -741,6 +650,7 @@ function spin() {
       document.getElementById('spinBtn').disabled = false;
 
       resultText.textContent = entries[winner];
+      trackDecision();
       resultBanner.classList.add('has-result');
 
       spinHistory.unshift({ label: entries[winner], color: COLORS[winner % COLORS.length] });
@@ -783,5 +693,24 @@ window.addEventListener('resize', resizeCanvas);
 </script>
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
