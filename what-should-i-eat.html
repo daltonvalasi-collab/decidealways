@@ -401,11 +401,6 @@
     .hero h1 { font-size: 36px; letter-spacing: -1.5px; }
   }
 </style>
-
-  <!-- ============================================================
-       GOOGLE ADSENSE — replace ca-pub-XXXXXXXXXXXXXXXX with your
-       actual Publisher ID from adsense.google.com
-  ============================================================ -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3748246393578670"
      crossorigin="anonymous"></script>
   <!-- AdSense ad-unit styles -->
@@ -444,94 +439,6 @@
   <h1>What Should<br>I <em>Eat?</em></h1>
   <p>Spin the wheel, end the debate.</p>
 </div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="1515151515"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-<!-- Filters -->
-<div class="filter-section">
-  <span class="filter-label">Filter by type</span>
-  <div class="filter-tabs">
-    <button class="filter-tab active" onclick="setFilter('all', this)">🍽️ All</button>
-    <button class="filter-tab" onclick="setFilter('comfort', this)">🏠 Comfort Food</button>
-    <button class="filter-tab" onclick="setFilter('asian', this)">🥢 Asian</button>
-    <button class="filter-tab" onclick="setFilter('western', this)">🍔 Western</button>
-    <button class="filter-tab" onclick="setFilter('healthy', this)">🥗 Healthy</button>
-    <button class="filter-tab" onclick="setFilter('fast', this)">⚡ Fast Food</button>
-    <button class="filter-tab" onclick="setFilter('custom', this)">✏️ Custom</button>
-  </div>
-</div>
-
-<!-- Main -->
-<div class="main">
-  <div class="wheel-section">
-    <div class="wheel-outer">
-      <canvas class="wheel-canvas" id="wheelCanvas"></canvas>
-      <div class="pointer"></div>
-      <div class="spin-center" onclick="spin()">
-        <span>SPIN</span>
-      </div>
-    </div>
-
-    <div class="result-card" id="resultCard">
-      <span class="result-emoji" id="resultEmoji"></span>
-      <span class="result-name" id="resultName">Spin to find out!</span>
-    </div>
-
-    <button class="btn-spin" id="spinBtn" onclick="spin()">Spin the Wheel</button>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sidebar-title">
-      On the Wheel
-      <span class="count-badge" id="countBadge">0</span>
-    </div>
-
-    <div class="entries-list" id="entriesList"></div>
-
-    <div class="add-row">
-      <input class="add-input" id="addInput" type="text" placeholder="Add your own food..." maxlength="30">
-      <button class="btn-add" onclick="addCustom()">+</button>
-    </div>
-
-    <div class="sidebar-actions">
-      <button class="btn-sm" onclick="clearCustom()">Remove custom</button>
-      <button class="btn-sm" onclick="shuffleEntries()">Shuffle</button>
-    </div>
-
-    <div class="history-panel" id="histPanel" style="display:none">
-      <div class="hist-title">Recent picks</div>
-      <div class="hist-items" id="histItems"></div>
-    </div>
-  </div>
-</div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="1616161616"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
 <!-- SEO -->
 <div class="content">
   <h2>The food decision wheel</h2>
@@ -543,20 +450,7 @@
       <h3>Can I add my own restaurants?</h3>
       <p>Yes — type anything in the "Add your own food" box and it gets added to the wheel immediately. Great for adding your local favourites or specific restaurants you're choosing between.</p>
     </div>
-    
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="1717171717"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-    <div class="faq-item">
+<div class="faq-item">
       <h3>How do I remove a food I don't want?</h3>
       <p>Click the × next to any item in the list on the right to remove it from the wheel. The wheel updates instantly.</p>
     </div>
@@ -868,6 +762,7 @@ function spin() {
       spinning = false;
       document.getElementById('spinBtn').disabled = false;
 
+      trackDecision();
       const won = entries[winner];
       resultName.textContent = won.name;
       resultEmoji.textContent = won.emoji;
@@ -907,5 +802,24 @@ window.addEventListener('resize', resizeCanvas);
 </script>
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
