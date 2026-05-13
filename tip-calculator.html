@@ -118,86 +118,6 @@
   <p>Split the bill fairly. Works out tip and total per person instantly.</p>
 </div>
 
-<div class="ad-unit">
-  <div class="ad-label">Advertisement</div>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="7777777777" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
-
-<div class="calc-card">
-
-  <!-- Bill amount -->
-  <div class="field">
-    <div class="field-label">
-      Bill Amount
-      <select class="currency-select" id="currencySelect" onchange="calculate()">
-        <option value="$">$ USD</option>
-        <option value="£">£ GBP</option>
-        <option value="€">€ EUR</option>
-        <option value="A$">A$ AUD</option>
-        <option value="NZ$">NZ$ NZD</option>
-        <option value="C$">C$ CAD</option>
-      </select>
-    </div>
-    <div class="bill-input-wrap">
-      <span class="currency-symbol" id="currSymbol">$</span>
-      <input class="bill-input" type="number" id="billInput" placeholder="0.00" min="0" step="0.01" oninput="calculate()">
-    </div>
-  </div>
-
-  <!-- Tip % -->
-  <div class="field">
-    <div class="field-label">Tip Percentage</div>
-    <div class="tip-grid">
-      <button class="tip-btn" onclick="setTip(5, this)">5%</button>
-      <button class="tip-btn" onclick="setTip(10, this)">10%</button>
-      <button class="tip-btn active" onclick="setTip(15, this)">15%</button>
-      <button class="tip-btn" onclick="setTip(18, this)">18%</button>
-      <button class="tip-btn" onclick="setTip(20, this)">20%</button>
-      <button class="tip-btn" onclick="setTip(25, this)">25%</button>
-    </div>
-    <div class="custom-tip-wrap">
-      <span class="custom-tip-label">Custom:</span>
-      <input class="custom-tip" type="number" id="customTip" value="15" min="0" max="100" oninput="onCustomTip()">
-      <span class="pct-symbol">%</span>
-    </div>
-  </div>
-
-  <!-- People -->
-  <div class="field" style="margin-bottom:0">
-    <div class="field-label">Split Between</div>
-    <div class="people-row">
-      <button class="people-btn" onclick="changePeople(-1)">−</button>
-      <span class="people-num" id="peopleNum">1</span>
-      <span class="people-label" id="peopleLabel">person</span>
-      <button class="people-btn" onclick="changePeople(1)">+</button>
-    </div>
-  </div>
-
-  <!-- Results -->
-  <div class="results-grid">
-    <div class="result-card highlight">
-      <span class="result-label">Tip Amount</span>
-      <span class="result-value" id="tipAmount">$0.00</span>
-    </div>
-    <div class="result-card highlight green">
-      <span class="result-label">Tip Per Person</span>
-      <span class="result-value" id="tipPer">$0.00</span>
-    </div>
-  </div>
-
-  <div class="total-card">
-    <span class="total-label">Total per person</span>
-    <span class="total-value" id="totalPer">$0.00</span>
-  </div>
-
-</div>
-
-<div class="ad-unit">
-  <div class="ad-label">Advertisement</div>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="8888888888" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
 
 <div class="content">
   <h2>Free tip calculator — split any bill instantly</h2>
@@ -234,5 +154,41 @@
 
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+<script>
+  let tipPct=15,people=1;
+  function setTip(pct,btn){tipPct=pct;document.querySelectorAll('.tip-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('customTip').value=pct;calculate();}
+  function onCustomTip(){const val=parseFloat(document.getElementById('customTip').value);if(!isNaN(val)&&val>=0){tipPct=val;document.querySelectorAll('.tip-btn').forEach(b=>b.classList.remove('active'));}calculate();}
+  function changePeople(delta){people=Math.max(1,Math.min(99,people+delta));document.getElementById('peopleNum').textContent=people;document.getElementById('peopleLabel').textContent=people===1?'person':'people';calculate();}
+  function calculate(){
+    const bill=parseFloat(document.getElementById('billInput').value)||0;
+    const sym=document.getElementById('currencySelect').value;
+    document.getElementById('currSymbol').textContent=sym;
+    const tip=bill*(tipPct/100),total=bill+tip,tipPer=tip/people,totalPer=total/people;
+    if(bill>0)trackDecision();
+    document.getElementById('tipAmount').textContent=sym+tip.toFixed(2);
+    document.getElementById('tipPer').textContent=sym+tipPer.toFixed(2);
+    document.getElementById('totalPer').textContent=sym+totalPer.toFixed(2);
+  }
+  calculate();
+</script>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
