@@ -152,81 +152,7 @@
 </div>
 
 <!-- Ad slot 1 -->
-<div class="ad-unit">
-  <div class="ad-label">Advertisement</div>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="1111111111" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
 
-<!-- Mode tabs -->
-<div class="mode-tabs">
-  <button class="mode-tab active" id="tabCountdown" onclick="setMode('countdown')">Countdown</button>
-  <button class="mode-tab" id="tabStopwatch" onclick="setMode('stopwatch')">Stopwatch</button>
-</div>
-
-<!-- Timer display -->
-<div class="timer-display">
-  <svg class="progress-ring" id="progressRing" width="340" height="340" viewBox="0 0 340 340">
-    <circle class="ring-bg" cx="170" cy="170" r="158" stroke-width="6"/>
-    <circle class="ring-fill" id="ringFill" cx="170" cy="170" r="158" stroke-width="6" stroke-dasharray="992" stroke-dashoffset="0"/>
-  </svg>
-  <span class="time-text" id="timeText">00:00</span>
-  <span class="ms-text" id="msText" style="display:none">.00</span>
-</div>
-
-<!-- Countdown inputs -->
-<div class="input-section" id="inputSection">
-  <div class="time-input-group">
-    <input class="time-input" id="inputH" type="number" value="0" min="0" max="99" placeholder="0">
-    <span class="time-unit">Hours</span>
-  </div>
-  <span class="time-sep">:</span>
-  <div class="time-input-group">
-    <input class="time-input" id="inputM" type="number" value="5" min="0" max="59" placeholder="5">
-    <span class="time-unit">Min</span>
-  </div>
-  <span class="time-sep">:</span>
-  <div class="time-input-group">
-    <input class="time-input" id="inputS" type="number" value="0" min="0" max="59" placeholder="0">
-    <span class="time-unit">Sec</span>
-  </div>
-</div>
-
-<!-- Presets -->
-<div class="presets" id="presetSection">
-  <button class="preset" onclick="setPreset(1,0)">1 min</button>
-  <button class="preset" onclick="setPreset(2,0)">2 min</button>
-  <button class="preset" onclick="setPreset(5,0)">5 min</button>
-  <button class="preset" onclick="setPreset(10,0)">10 min</button>
-  <button class="preset" onclick="setPreset(15,0)">15 min</button>
-  <button class="preset" onclick="setPreset(25,0)">25 min 🍅</button>
-  <button class="preset" onclick="setPreset(30,0)">30 min</button>
-  <button class="preset" onclick="setPreset(60,0)">1 hour</button>
-</div>
-
-<!-- Controls -->
-<div class="controls" id="controls">
-  <button class="btn btn-start" id="startBtn" onclick="startTimer()">Start</button>
-  <button class="btn btn-reset" id="resetBtn" onclick="resetTimer()">Reset</button>
-</div>
-
-<div class="sound-toggle" onclick="toggleSound()" id="soundToggle">
-  <div class="toggle-pill on" id="togglePill"><div class="toggle-dot"></div></div>
-  <span>Sound alerts</span>
-</div>
-
-<!-- Laps (stopwatch only) -->
-<div class="laps-section" id="lapsSection" style="display:none">
-  <div class="laps-title">Laps</div>
-  <div class="laps-list" id="lapsList"></div>
-</div>
-
-<!-- Ad slot 2 -->
-<div class="ad-unit" style="margin-top:40px">
-  <div class="ad-label">Advertisement</div>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3748246393578670" data-ad-slot="2222222222" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
 
 <div class="content">
   <h2>Free online timer — countdown and stopwatch</h2>
@@ -266,5 +192,75 @@
 
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+<script>
+  let mode='countdown',running=false,intervalId=null,totalSeconds=300,remainingMs=300000,
+      elapsedMs=0,lastTick=null,soundOn=true,laps=[],lastLapMs=0,audioCtx=null;
+  function setMode(m){
+    mode=m; resetTimer();
+    document.getElementById('tabCountdown').classList.toggle('active',m==='countdown');
+    document.getElementById('tabStopwatch').classList.toggle('active',m==='stopwatch');
+    document.getElementById('inputSection').style.display=m==='countdown'?'flex':'none';
+    document.getElementById('presetSection').style.display=m==='countdown'?'flex':'none';
+    document.getElementById('msText').style.display=m==='stopwatch'?'inline':'none';
+    document.getElementById('lapsSection').style.display=m==='stopwatch'?'block':'none';
+    document.getElementById('progressRing').style.display=m==='countdown'?'block':'none';
+    const ctrl=document.getElementById('controls');
+    if(m==='stopwatch'){ctrl.innerHTML=`<button class="btn btn-start" id="startBtn" onclick="startTimer()">Start</button><button class="btn btn-lap" onclick="addLap()">Lap</button><button class="btn btn-reset" id="resetBtn" onclick="resetTimer()">Reset</button>`;}
+    else{ctrl.innerHTML=`<button class="btn btn-start" id="startBtn" onclick="startTimer()">Start</button><button class="btn btn-reset" id="resetBtn" onclick="resetTimer()">Reset</button>`;}
+    updateDisplay();
+  }
+  function getInputMs(){const h=parseInt(document.getElementById('inputH')?.value)||0,m=parseInt(document.getElementById('inputM')?.value)||0,s=parseInt(document.getElementById('inputS')?.value)||0;return(h*3600+m*60+s)*1000;}
+  function setPreset(min,sec){document.getElementById('inputH').value=0;document.getElementById('inputM').value=min;document.getElementById('inputS').value=sec;resetTimer();}
+  function startTimer(){
+    if(running){running=false;clearInterval(intervalId);document.getElementById('startBtn').textContent='Resume';document.getElementById('startBtn').className='btn btn-pause';return;}
+    if(mode==='countdown'){if(!lastTick)remainingMs=getInputMs();if(remainingMs<=0)return;}
+    running=true;lastTick=performance.now();
+    document.getElementById('startBtn').textContent='Pause';document.getElementById('startBtn').className='btn btn-pause';
+    intervalId=setInterval(tick,50);
+  }
+  function tick(){
+    const now=performance.now(),delta=now-lastTick;lastTick=now;
+    if(mode==='countdown'){remainingMs-=delta;if(remainingMs<=0){remainingMs=0;running=false;clearInterval(intervalId);onCountdownDone();}updateDisplay();updateRing();}
+    else{elapsedMs+=delta;updateDisplay();}
+  }
+  function updateDisplay(){
+    const el=document.getElementById('timeText');
+    if(mode==='countdown'){const ms=Math.max(0,remainingMs);el.textContent=formatTime(ms);el.className='time-text'+(ms<=10000&&ms>0?' danger':ms<=30000&&ms>0?' warning':ms===0&&!running&&lastTick?' done':'');}
+    else{el.textContent=formatTime(elapsedMs);document.getElementById('msText').textContent='.'+String(Math.floor((elapsedMs%1000)/10)).padStart(2,'0');}
+  }
+  function formatTime(ms){const total=Math.ceil(ms/1000),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;if(h>0)return`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;return`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+  function updateRing(){const total=getInputMs()||1,ratio=Math.max(0,remainingMs/total),circumference=992;document.getElementById('ringFill').style.strokeDashoffset=circumference*(1-ratio);}
+  function resetTimer(){running=false;clearInterval(intervalId);lastTick=null;remainingMs=mode==='countdown'?getInputMs():0;elapsedMs=0;laps=[];lastLapMs=0;document.getElementById('lapsList').innerHTML='';const btn=document.getElementById('startBtn');if(btn){btn.textContent='Start';btn.className='btn btn-start';}document.getElementById('timeText').className='time-text';document.getElementById('ringFill').style.strokeDashoffset=0;updateDisplay();}
+  function addLap(){if(!running&&elapsedMs===0)return;const split=elapsedMs-lastLapMs;laps.unshift({total:elapsedMs,split});lastLapMs=elapsedMs;const list=document.getElementById('lapsList');list.innerHTML=laps.map((l,i)=>`<div class="lap-item"><span class="lap-num">Lap ${laps.length-i}</span><span class="lap-time">${formatTime(l.total)}</span><span class="lap-split">+${formatTime(l.split)}</span></div>`).join('');document.getElementById('lapsSection').style.display='block';}
+  function onCountdownDone(){
+    trackDecision();
+    document.getElementById('timeText').className='time-text done';const btn=document.getElementById('startBtn');btn.textContent='Restart';btn.className='btn btn-start';lastTick=null;
+    const banner=document.getElementById('doneBanner');banner.classList.add('show');setTimeout(()=>banner.classList.remove('show'),3000);
+    if(soundOn)playAlert();
+  }
+  function playAlert(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();[0,0.2,0.4].forEach(delay=>{const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.connect(gain);gain.connect(audioCtx.destination);osc.frequency.value=880;osc.type='sine';gain.gain.setValueAtTime(0.3,audioCtx.currentTime+delay);gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+delay+0.3);osc.start(audioCtx.currentTime+delay);osc.stop(audioCtx.currentTime+delay+0.3);});}catch(e){}}
+  function toggleSound(){soundOn=!soundOn;document.getElementById('togglePill').classList.toggle('on',soundOn);}
+  document.addEventListener('click',()=>{if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}},{once:true});
+  updateDisplay();
+</script>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
