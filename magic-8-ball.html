@@ -397,11 +397,6 @@
     .nav-links { display: none; }
   }
 </style>
-
-  <!-- ============================================================
-       GOOGLE ADSENSE — replace ca-pub-XXXXXXXXXXXXXXXX with your
-       actual Publisher ID from adsense.google.com
-  ============================================================ -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3748246393578670"
      crossorigin="anonymous"></script>
   <!-- AdSense ad-unit styles -->
@@ -443,60 +438,6 @@
   <h1>Magic 8 Ball</h1>
   <p>The universe has answers. You need only ask.</p>
 </div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="1212121212"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-<div class="question-section">
-  <label class="question-label" for="questionInput">Your question</label>
-  <input class="question-input" id="questionInput" type="text" placeholder="Will everything work out?" maxlength="120">
-</div>
-
-<div class="ball-section">
-  <div class="ball-container" id="ballContainer" onclick="askBall()" title="Click to ask">
-    <div class="ball-outer">
-      <div class="ball-eight" id="ballEight">8</div>
-      <div class="answer-window" id="answerWindow">
-        <div class="answer-inner">
-          <div class="answer-text" id="answerText"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="shake-hint" id="shakeHint">Click the ball to reveal your answer</div>
-  <button class="btn-ask" id="askBtn" onclick="askBall()">Ask the Ball</button>
-</div>
-
-<div class="history-section" id="histSection" style="display:none">
-  <div class="hist-label">Readings</div>
-  <div class="hist-list" id="histList"></div>
-</div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="1313131313"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
 <div class="content">
   <h2>About the Magic 8 Ball</h2>
   <p>The Magic 8 Ball is one of the most beloved decision-making toys ever created. Originally invented in 1950 by Albert Carter and Abe Bookman and later acquired by Mattel, it has been a pop culture icon for over 70 years. The original toy contains a 20-sided die floating in dark blue liquid inside a black plastic ball shaped like a billiard 8-ball. When shaken and turned over, one of 20 answers floats to the window.</p>
@@ -532,5 +473,79 @@
 
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+<script>
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div'); s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--min-op:${0.05+Math.random()*0.1};--max-op:${0.3+Math.random()*0.5};`;
+    starsEl.appendChild(s);
+  }
+  const ANSWERS = [
+    {text:"It is certain",type:"positive"},{text:"It is decidedly so",type:"positive"},
+    {text:"Without a doubt",type:"positive"},{text:"Yes, definitely",type:"positive"},
+    {text:"You may rely on it",type:"positive"},{text:"As I see it, yes",type:"positive"},
+    {text:"Most likely",type:"positive"},{text:"Outlook good",type:"positive"},
+    {text:"Yes",type:"positive"},{text:"Signs point to yes",type:"positive"},
+    {text:"Reply hazy, try again",type:"neutral"},{text:"Ask again later",type:"neutral"},
+    {text:"Better not tell you now",type:"neutral"},{text:"Cannot predict now",type:"neutral"},
+    {text:"Concentrate and ask again",type:"neutral"},
+    {text:"Don't count on it",type:"negative"},{text:"My reply is no",type:"negative"},
+    {text:"My sources say no",type:"negative"},{text:"Outlook not so good",type:"negative"},
+    {text:"Very doubtful",type:"negative"},
+  ];
+  const TYPE_COLORS = {positive:'#7ec8a0',neutral:'#7ea0c8',negative:'#c87e7e'};
+  let shaking = false, history = [];
+  function getRand(n){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n;}
+  function askBall(){
+    if(shaking)return; shaking=true;
+    const container=document.getElementById('ballContainer');
+    const eight=document.getElementById('ballEight');
+    const answerWindow=document.getElementById('answerWindow');
+    const answerText=document.getElementById('answerText');
+    const hint=document.getElementById('shakeHint');
+    answerWindow.classList.remove('show'); eight.style.opacity='1';
+    hint.textContent='✦ The spirits are consulting ✦';
+    container.classList.add('shaking');
+    setTimeout(()=>{
+      container.classList.remove('shaking');
+      trackDecision();
+      const answer=ANSWERS[getRand(ANSWERS.length)];
+      answerText.textContent=answer.text;
+      answerText.className=`answer-text ${answer.type}`;
+      eight.style.opacity='0'; answerWindow.classList.add('show');
+      hint.textContent='Click again for another reading';
+      const q=document.getElementById('questionInput').value.trim();
+      history.unshift({answer,question:q}); if(history.length>8)history.pop();
+      updateHistory(); shaking=false;
+    },700);
+  }
+  function updateHistory(){
+    const section=document.getElementById('histSection');
+    const list=document.getElementById('histList');
+    section.style.display='block';
+    list.innerHTML=history.map(h=>`<div class="hist-item"><div class="hist-dot" style="background:${TYPE_COLORS[h.answer.type]}"></div><span class="hist-answer" style="color:${TYPE_COLORS[h.answer.type]}">${h.answer.text}</span>${h.question?`<span class="hist-q">${h.question.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`:''}</div>`).join('');
+  }
+  document.getElementById('questionInput').addEventListener('keydown',e=>{if(e.key==='Enter')askBall();});
+</script>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
