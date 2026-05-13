@@ -372,6 +372,19 @@
       font-family: sans-serif;
     }
   </style>
+<script>
+  // DecideAlways decision counter — must load before tool scripts
+  (function() {
+    window.trackDecision = function() {
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made').catch(() => {});
+    };
+  })();
+</script>
 </head>
 <body>
 
@@ -543,24 +556,5 @@
 </script>
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
-
-<script>
-  // ── DecideAlways decision counter ─────────────────────────────────────────
-  // Increments the shared counter on CountAPI when a result is produced.
-  // Called by the tool's result function — see trackDecision() calls below.
-  (function() {
-    window.trackDecision = function() {
-      // Debounce: only count once every 2 seconds per page to avoid spam clicks
-      const key = 'da_last_tracked';
-      const now = Date.now();
-      const last = parseInt(sessionStorage.getItem(key) || '0');
-      if (now - last < 2000) return;
-      sessionStorage.setItem(key, now);
-
-      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
-        .catch(() => {}); // Silently fail — never block the UI
-    };
-  })();
-</script>
 </body>
 </html>
