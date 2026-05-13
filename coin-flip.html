@@ -351,11 +351,6 @@
     .stats { max-width: 100%; }
   }
 </style>
-
-  <!-- ============================================================
-       GOOGLE ADSENSE — replace ca-pub-XXXXXXXXXXXXXXXX with your
-       actual Publisher ID from adsense.google.com
-  ============================================================ -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3748246393578670"
      crossorigin="anonymous"></script>
   <!-- AdSense ad-unit styles -->
@@ -393,81 +388,6 @@
   <h1>Flip a <span>Coin</span></h1>
   <p>Instant heads or tails. Truly random. Always free.</p>
 </div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="3333333333"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-<!-- Coin -->
-<div class="stage" id="stage" onclick="flip()" title="Click to flip">
-  <div class="coin-wrap" id="coin">
-    <div class="coin-face coin-heads">
-      <span class="coin-icon">🪙</span>
-      <span>HEADS</span>
-    </div>
-    <div class="coin-face coin-tails">
-      <span class="coin-icon">⭐</span>
-      <span>TAILS</span>
-    </div>
-  </div>
-</div>
-
-<div class="result-display">
-  <div class="result-label" id="resultLabel">—</div>
-  <div class="result-sub" id="resultSub">Flip to get started</div>
-</div>
-
-<button class="btn-flip" id="flipBtn" onclick="flip()">
-  Flip Coin
-</button>
-<button class="btn-reset" onclick="resetStats()">Reset stats</button>
-
-<!-- Stats -->
-<div class="stats">
-  <div class="stat-card">
-    <span class="stat-num heads" id="headsCount">0</span>
-    <span class="stat-label">Heads</span>
-  </div>
-  <div class="stat-card">
-    <span class="stat-num" id="totalCount" style="color:var(--text)">0</span>
-    <span class="stat-label">Total</span>
-  </div>
-  <div class="stat-card">
-    <span class="stat-num tails" id="tailsCount">0</span>
-    <span class="stat-label">Tails</span>
-  </div>
-</div>
-
-<!-- History -->
-<div class="history" id="historySection" style="display:none">
-  <div class="history-label">Last 20 flips</div>
-  <div class="history-dots" id="historyDots"></div>
-</div>
-
-
-  <!-- AD SLOT: Advertisement
-       Replace data-ad-slot value with your real ad unit ID from AdSense -->
-  <div class="ad-unit">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3748246393578670"
-         data-ad-slot="4444444444"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
 <!-- SEO Content -->
 <div class="content">
   <h2>About this free coin flip tool</h2>
@@ -571,6 +491,7 @@
       flipping = false;
       flipBtn.disabled = false;
 
+      trackDecision();
       if (isHeads) {
         heads++;
         resultLabel.textContent = 'Heads!';
@@ -622,5 +543,24 @@
 </script>
 
 <div style="text-align:center;padding:20px 0 0;font-size:13px;color:#374151;"><a href="/privacy-policy.html" style="color:#6b7280;text-decoration:none;">Privacy Policy</a></div>
+
+<script>
+  // ── DecideAlways decision counter ─────────────────────────────────────────
+  // Increments the shared counter on CountAPI when a result is produced.
+  // Called by the tool's result function — see trackDecision() calls below.
+  (function() {
+    window.trackDecision = function() {
+      // Debounce: only count once every 2 seconds per page to avoid spam clicks
+      const key = 'da_last_tracked';
+      const now = Date.now();
+      const last = parseInt(sessionStorage.getItem(key) || '0');
+      if (now - last < 2000) return;
+      sessionStorage.setItem(key, now);
+
+      fetch('https://api.countapi.xyz/hit/decidealways/decisions-made')
+        .catch(() => {}); // Silently fail — never block the UI
+    };
+  })();
+</script>
 </body>
 </html>
